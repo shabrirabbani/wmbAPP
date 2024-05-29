@@ -2,25 +2,22 @@ package com.wmb.wmbApp.entity;
 
 import com.wmb.wmbApp.constant.ConstantTable;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = ConstantTable.CUSTOMER)
-public class Customer {
+@Table (name = ConstantTable.TABLES)
+public class Tables {
     @Id
     @GeneratedValue (strategy = GenerationType.UUID)
     private String id;
 
-    @Column (name = "customer_name")
+    @Column (name = "table_name")
     private String name;
-
-    @Column(name = "mobile_phone_no")
-    private String mobilePhone;
-
-    @Column(name = "is_member")
-    private Boolean isMember;
 }
