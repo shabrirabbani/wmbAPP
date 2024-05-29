@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,11 +24,13 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.saveAndFlush(customer);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Customer getById(String id) {
         return findByIdOrThrowNotFound(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Customer> getAll(SearchCustomerRequest request) {
         Specification<Customer> customerSpecification = CustomerSpecification.getSpecification(request);

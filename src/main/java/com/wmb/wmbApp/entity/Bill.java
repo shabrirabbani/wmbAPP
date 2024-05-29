@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wmb.wmbApp.constant.ConstantTable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table (name = ConstantTable.BILL)
+@Builder
 public class Bill {
     @Id
     @GeneratedValue (strategy = GenerationType.UUID)
@@ -29,11 +27,11 @@ public class Bill {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    private Customer customerId;
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "table_id")
-    private Tables tableId;
+    private Tables tables;
 
     @ManyToOne
     @JoinColumn(name = "trans_type_id")

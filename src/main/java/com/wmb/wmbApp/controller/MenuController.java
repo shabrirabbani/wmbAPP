@@ -1,6 +1,7 @@
 package com.wmb.wmbApp.controller;
 
 import com.wmb.wmbApp.constant.APIUrl;
+import com.wmb.wmbApp.dto.request.NewMenuRequest;
 import com.wmb.wmbApp.dto.request.SearchMenuRequest;
 import com.wmb.wmbApp.entity.Menu;
 import com.wmb.wmbApp.service.MenuService;
@@ -16,8 +17,8 @@ public class MenuController {
     private final MenuService menuService;
 
     @PostMapping
-    public Menu createNewMenu(@RequestBody Menu menu){
-        return menuService.create(menu);
+    public Menu createNewMenu(@RequestBody NewMenuRequest menuRequest){
+        return menuService.create(menuRequest);
     }
 
     @GetMapping(path = APIUrl.PATH_VAR_ID)
@@ -32,11 +33,11 @@ public class MenuController {
             @RequestParam(name = "price" , required = false) Long price
     ){
         SearchMenuRequest searchMenuRequest = SearchMenuRequest.builder()
-                .menuName(menuName)
+                .name(menuName)
                 .price(price)
                 .build();
 
-        return menuService.getAll(searchMenuRequest);
+        return null;
     }
 
     @PutMapping

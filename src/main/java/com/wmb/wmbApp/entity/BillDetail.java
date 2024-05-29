@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wmb.wmbApp.constant.ConstantTable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -17,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table (name = ConstantTable.BILL_DETAIL)
+@Builder
 public class BillDetail {
     @Id
     @GeneratedValue (strategy = GenerationType.UUID)
