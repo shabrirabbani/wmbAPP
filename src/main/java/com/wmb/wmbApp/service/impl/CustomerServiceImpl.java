@@ -1,12 +1,18 @@
 package com.wmb.wmbApp.service.impl;
 
+import com.wmb.wmbApp.dto.request.NewCustomerRequest;
 import com.wmb.wmbApp.dto.request.SearchCustomerRequest;
 import com.wmb.wmbApp.entity.Customer;
 import com.wmb.wmbApp.repository.CustomerRepository;
 import com.wmb.wmbApp.service.CustomerService;
 import com.wmb.wmbApp.spesification.CustomerSpecification;
+import com.wmb.wmbApp.utils.ValidationUtil;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +23,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
-    private final EntityManager entityManager;
+    private final ValidationUtil validationUtil;
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public Customer create(Customer customer) {
-        return customerRepository.saveAndFlush(customer);
+    public Customer create(NewCustomerRequest customerRequest) {
+        validationUtil.validate(customerRequest);
+
+        Customer newCustomer = Customer.builder()
+                .name(customerRequest.getName())
+                .mobilePhone(customerRequest.getMobilePhone())
+                .isMember(customerRequest.getIsMember())
+                .build();
+
+        return customerRepository.saveAndFlush(newCustomer);
     }
 
     @Transactional(readOnly = true)
@@ -32,13 +47,27 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<Customer> getAll(SearchCustomerRequest request) {
-        Specification<Customer> customerSpecification = CustomerSpecification.getSpecification(request);
-        if (request.getName() == null && request.getPhone() == null & request.getIsMember() == null){
-            return customerRepository.findAll();
+    public Page<Customer> getAll(SearchCustomerRequest customerRequest) {
+
+        if(customerRequest.getPage() <= 0){
+            customerRequest.setPage(1);
         }
-        return customerRepository.findAll(customerSpecification);
+
+        String validSortBy = "name";
+
+        Sort sort = Sort.by(Sort.Direction.fromString(customerRequest.getDirection()), validSortBy);
+
+        Pageable pageable = PageRequest.of((customerRequest.getPage() - 1), customerRequest.getSize(), sort);
+
+        if (customerRequest.getName() == null){
+            return customerRepository.findAll(pageable);
+        }
+
+        Specification<Customer> specification = CustomerSpecification.getSpecification(customerRequest);
+
+        return customerRepository.findAll(specification, pageable);
     }
+
 
     @Override
     public Customer update(Customer customer) {

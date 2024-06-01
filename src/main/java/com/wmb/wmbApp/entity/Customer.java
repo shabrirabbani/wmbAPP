@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = ConstantTable.CUSTOMER)
+@Builder
 public class Customer {
     @Id
     @GeneratedValue (strategy = GenerationType.UUID)

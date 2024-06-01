@@ -9,4 +9,9 @@ public class SearchCustomerRequest {
     private String name;
     private String phone;
     private Boolean isMember;
+
+    private Integer page;
+    private Integer size;
+    private String sortBy;
+    private String Direction;
 }
