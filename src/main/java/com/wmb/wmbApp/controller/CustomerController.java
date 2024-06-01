@@ -1,10 +1,14 @@
 package com.wmb.wmbApp.controller;
 
 import com.wmb.wmbApp.constant.APIUrl;
+import com.wmb.wmbApp.constant.ResponseMessage;
 import com.wmb.wmbApp.dto.request.SearchCustomerRequest;
+import com.wmb.wmbApp.dto.response.CommonResponse;
 import com.wmb.wmbApp.entity.Customer;
 import com.wmb.wmbApp.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +25,15 @@ public class CustomerController {
     }
 
     @GetMapping(path = APIUrl.PATH_VAR_ID)
-    public Customer getCustomerById(@PathVariable String id){
-        return customerService.getById(id);
+    public ResponseEntity<CommonResponse<Customer>> getCustomerById(@PathVariable String id){
+        Customer customerById = customerService.getById(id);
+        CommonResponse<Customer> response = CommonResponse.<Customer>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(ResponseMessage.SUCCESS_GET_DATA)
+                .data(customerById)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

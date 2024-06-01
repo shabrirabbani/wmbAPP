@@ -12,5 +12,6 @@ import java.util.List;
 public class BillRequest {
     private String customerId;
     private String tableId;
+    private String transtypeId;
     private List<BillDetailRequest> billDetails;
 }

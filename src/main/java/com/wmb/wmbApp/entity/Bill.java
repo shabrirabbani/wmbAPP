@@ -34,7 +34,7 @@ public class Bill {
     private Tables tables;
 
     @ManyToOne
-    @JoinColumn(name = "trans_type_id")
+    @JoinColumn(name = "trans_type_id", nullable = false)
     private Transtype transtype;
 
     @OneToMany(mappedBy = "bill")

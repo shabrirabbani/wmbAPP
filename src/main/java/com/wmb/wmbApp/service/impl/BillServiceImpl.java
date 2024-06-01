@@ -7,10 +7,12 @@ import com.wmb.wmbApp.dto.response.BillResponse;
 import com.wmb.wmbApp.entity.*;
 import com.wmb.wmbApp.repository.BillDetailRepository;
 import com.wmb.wmbApp.repository.BillRepository;
+import com.wmb.wmbApp.repository.TranstypeRepository;
 import com.wmb.wmbApp.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -21,29 +23,31 @@ import java.util.List;
 public class BillServiceImpl implements BillService {
 
     private final BillRepository billRepository;
-    private final BillDetailRepository billDetailRepository;
     private final BillDetailService billDetailService;
     private final CustomerService customerService;
     private final TablesService tablesService;
     private final MenuService menuService;
+    private final TranstypeService transtypeService;
 
 
-
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public BillResponse create(BillRequest request) {
 
         Customer customer = customerService.getById(request.getCustomerId());
         Tables tables = tablesService.getById(request.getTableId());
+        Transtype transtype = transtypeService.getById(request.getTranstypeId());
 
         Bill bill = Bill.builder()
                 .customer(customer)
                 .tables(tables)
                 .transDate(new Date())
+                .transtype(transtype)
                 .build();
+        billRepository.saveAndFlush(bill);
 
         List<BillDetail> billDetail = request.getBillDetails().stream().map(
                 detailRequest -> {
-                    log.info("qty dari detail request {}", detailRequest.getQty());
 
                     Menu menu = menuService.getById(detailRequest.getMenuId());
 
@@ -70,7 +74,9 @@ public class BillServiceImpl implements BillService {
         return BillResponse.builder()
                 .id(bill.getId())
                 .customerId(bill.getCustomer().getId())
+                .tableId(bill.getTables().getId())
                 .transDate(bill.getTransDate())
+                .transtypeId(bill.getTranstype().getId())
                 .billDetails(billDetailResponse)
                 .build();
     }
@@ -91,7 +97,9 @@ public class BillServiceImpl implements BillService {
             return BillResponse.builder()
                     .id(bill.getId())
                     .customerId(bill.getCustomer().getId())
+                    .tableId(bill.getTables().getId())
                     .transDate(bill.getTransDate())
+                    .transtypeId(bill.getTranstype().getId())
                     .billDetails(billDetailResponse)
                     .build();
         }).toList();

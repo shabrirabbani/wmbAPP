@@ -1,6 +1,7 @@
 package com.wmb.wmbApp.entity;
 
 import com.wmb.wmbApp.constant.ConstantTable;
+import com.wmb.wmbApp.constant.TransType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class Transtype {
     @GeneratedValue (strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "description")
-    private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "description", nullable = false)
+    private TransType type;
 }

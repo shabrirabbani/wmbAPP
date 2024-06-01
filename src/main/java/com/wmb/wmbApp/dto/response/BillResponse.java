@@ -15,5 +15,6 @@ public class BillResponse {
     private String customerId;
     private String tableId;
     private Date transDate;
+    private String transtypeId;
     private List<BillDetailResponse> billDetails;
 }
