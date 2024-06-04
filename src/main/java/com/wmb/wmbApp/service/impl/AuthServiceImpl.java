@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
         userAccountRepository.saveAndFlush(account);
 
         NewCustomerRequest customer = NewCustomerRequest.builder()
-                .status(true)
+                .isMember(true)
                 .userAccount(account)
                 .build();
 
@@ -104,7 +104,21 @@ public class AuthServiceImpl implements AuthService {
         Role admin = roleService.getOrSave(UserRole.ROLE_ADMIN);
         Role customer = roleService.getOrSave(UserRole.ROLE_CUSTOMER);
 
-        return null;
+        String hashPassword = passwordEncoder.encode(request.getPassword());
+
+        UserAccount account = UserAccount.builder()
+                .username(request.getUsername())
+                .password(hashPassword)
+                .role(List.of(admin, customer))
+                .isEnable(true)
+                .build();
+
+        userAccountRepository.saveAndFlush(account);
+
+        return RegisterResponse.builder()
+                .username(account.getUsername())
+                .roles(account.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+                .build();
     }
 
     @Transactional(readOnly = true)

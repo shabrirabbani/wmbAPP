@@ -15,11 +15,7 @@ import lombok.NoArgsConstructor;
 public class NewCustomerRequest {
 
     private String name;
-
     private String mobilePhone;
-
     private Boolean isMember;
-
-    private Boolean status;
     private UserAccount userAccount;
 }

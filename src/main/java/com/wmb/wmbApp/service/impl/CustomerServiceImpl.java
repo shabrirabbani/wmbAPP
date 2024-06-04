@@ -39,6 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .name(customerRequest.getName())
                 .mobilePhone(customerRequest.getMobilePhone())
                 .isMember(customerRequest.getIsMember())
+                .userAccount(customerRequest.getUserAccount())
                 .build();
 
         return customerRepository.saveAndFlush(newCustomer);
