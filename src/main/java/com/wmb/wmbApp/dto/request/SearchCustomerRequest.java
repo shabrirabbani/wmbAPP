@@ -9,6 +9,7 @@ public class SearchCustomerRequest {
     private String name;
     private String phone;
     private Boolean isMember;
+    private String userAccountId;
 
     private Integer page;
     private Integer size;

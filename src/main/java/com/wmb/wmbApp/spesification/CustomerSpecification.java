@@ -30,7 +30,13 @@ public class CustomerSpecification {
                 Predicate statusPredicate = criteriaBuilder.equal(root.get("isMember"), request.getIsMember());
                 predicates.add(statusPredicate);
             }
-            return query.where(criteriaBuilder.or(predicates.toArray(new Predicate[]{}))).getRestriction();
+
+            if (request.getUserAccountId() != null){
+                Predicate userAccountPredicate = criteriaBuilder.equal(root.get("userAccountId"), request.getUserAccountId());
+                predicates.add(userAccountPredicate);
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 }

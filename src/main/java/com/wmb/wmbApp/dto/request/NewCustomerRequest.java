@@ -1,6 +1,8 @@
 package com.wmb.wmbApp.dto.request;
 
+import com.wmb.wmbApp.entity.UserAccount;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +14,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class NewCustomerRequest {
 
-    @NotBlank(message = "name is required")
     private String name;
 
     private String mobilePhone;
 
-    @NotBlank(message = "isMember is required")
     private Boolean isMember;
+
+    private Boolean status;
+    private UserAccount userAccount;
 }
